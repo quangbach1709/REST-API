@@ -14,12 +14,16 @@
  </div>
 
 <div align="center"> 
-  <a href="mailto:bachh1124@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-333333?style=for-the-badge&logo=gmail&logoColor=red" />
+  <a href="mailto:bachh1124@gmail.com" target="_blank">
+    <img src="https://img.shields.io/badge/Gmail-D14836?logo=gmail&logoColor=white" />
   </a>
-    <a href="mailto:https://www.facebook.com/bach.quang2004/">
-    <img src="https://img.shields.io/badge/Facebook-Connect-brightgreen?style=for-the-badge&labelColor=black&logo=facebook" />
+  <a href="https://www.facebook.com/quangbach1709/" target="_blank">
+    <img src="https://img.shields.io/badge/Facebook-%231877F2.svg?logo=Facebook&logoColor=white" />
   </a>
+<a href="https://t.me/Quangbach1709" target="_blank">
+    <img src="https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white" />
+  </a>
+  
 
 </div>
 
