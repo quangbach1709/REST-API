@@ -1,6 +1,8 @@
 package com.quangbach1709.restapi.controller;
 
 import com.quangbach1709.restapi.dto.UserDTO;
+import com.quangbach1709.restapi.repository.PersonRepository;
+import com.quangbach1709.restapi.service.PersonService;
 import com.quangbach1709.restapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PersonService personService;
 
     @GetMapping
     public List<UserDTO> getAllUsers() {
@@ -34,11 +39,28 @@ public class UserController {
         return userService.createUser(userDTO);
     }
 
+//    @PostMapping("/person/{personId}")
+//    public UserDTO createUserPerson(@PathVariable Long personId, @RequestBody UserDTO userDTO) {
+//        userDTO.setPerson(personService.getPersonById(personId));
+//        return userService.createUser(userDTO);
+//    }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         UserDTO updatedUserDTO = userService.updateUser(id, userDTO);
         if (updatedUserDTO != null) {
             return ResponseEntity.ok(updatedUserDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/person/{personId}")
+    public ResponseEntity<UserDTO> updateUserPerson(@PathVariable Long id, @PathVariable Long personId) {
+        UserDTO userDTO = userService.getUserById(id);
+        if (userDTO != null) {
+            userDTO.setPerson(personService.getPersonById(personId));
+            return ResponseEntity.ok(userService.updateUser(id, userDTO));
         } else {
             return ResponseEntity.notFound().build();
         }

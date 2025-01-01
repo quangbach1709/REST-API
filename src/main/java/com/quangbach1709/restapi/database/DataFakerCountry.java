@@ -2,7 +2,10 @@ package com.quangbach1709.restapi.database;
 
 
 import com.github.javafaker.Faker;
+import com.quangbach1709.restapi.entity.Person;
 import com.quangbach1709.restapi.repository.CountryRepository;
+import com.quangbach1709.restapi.repository.PersonRepository;
+import com.quangbach1709.restapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -12,10 +15,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import com.quangbach1709.restapi.entity.Country;
 
-@Component
+//@Component
 public class DataFakerCountry implements CommandLineRunner {
     @Autowired
     private CountryRepository countryRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -34,5 +38,7 @@ public class DataFakerCountry implements CommandLineRunner {
 
         // Lưu vào database
         countryRepository.saveAll(fakeCountries);
+
+
     }
 }
