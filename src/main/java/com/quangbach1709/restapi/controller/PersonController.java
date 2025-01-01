@@ -2,6 +2,7 @@ package com.quangbach1709.restapi.controller;
 
 import com.quangbach1709.restapi.dto.PersonDTO;
 import com.quangbach1709.restapi.dto.UserDTO;
+import com.quangbach1709.restapi.repository.PersonRepository;
 import com.quangbach1709.restapi.service.PersonService;
 import com.quangbach1709.restapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 public class PersonController {
     @Autowired
     private PersonService personService;
+
 
     @GetMapping
     public List<PersonDTO> getAllPersons() {
