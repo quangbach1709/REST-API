@@ -14,13 +14,7 @@ public class PersonDTO {
     private LocalDate birthdate;
     private String phoneNumber;
     private String address;
+    private Long companyId;
 
-    public PersonDTO(Long id, String fullName, String gender, LocalDate birthdate, String phoneNumber, String address) {
-        this.id = id;
-        this.fullName = fullName;
-        this.gender = gender;
-        this.birthdate = birthdate;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-    }
+
 }
