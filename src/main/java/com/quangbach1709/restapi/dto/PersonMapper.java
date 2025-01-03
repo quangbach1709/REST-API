@@ -12,6 +12,10 @@ public class PersonMapper {
         dto.setBirthdate(person.getBirthDate());
         dto.setPhoneNumber(person.getPhoneNumber());
         dto.setAddress(person.getAddress());
+        // Điền companyId nếu có
+        if (person.getCompany() != null) {
+            dto.setCompanyId(person.getCompany().getId());
+        }
         return dto;
     }
 
