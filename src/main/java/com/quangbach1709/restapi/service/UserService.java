@@ -4,18 +4,23 @@ import com.quangbach1709.restapi.dto.PersonMapper;
 import com.quangbach1709.restapi.dto.RoleMapper;
 import com.quangbach1709.restapi.dto.UserDTO;
 import com.quangbach1709.restapi.dto.UserMapper;
+import com.quangbach1709.restapi.entity.Role;
 import com.quangbach1709.restapi.entity.User;
+import com.quangbach1709.restapi.repository.RoleRepository;
 import com.quangbach1709.restapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
@@ -31,6 +36,13 @@ public class UserService {
 
     public UserDTO createUser(UserDTO userDTO) {
         User user = UserMapper.toEntity(userDTO);
+        if (userDTO.getRoles() != null) {
+            Set<Role> roles = userDTO.getRoles().stream()
+                    .map(roleDTO -> roleRepository.findById(roleDTO.getId())
+                            .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleDTO.getId())))
+                    .collect(Collectors.toSet());
+            user.setRoles(roles);
+        }
         User savedUser = userRepository.save(user);
         return UserMapper.toDTO(savedUser);
     }
