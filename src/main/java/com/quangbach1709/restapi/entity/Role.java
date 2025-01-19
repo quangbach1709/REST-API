@@ -1,11 +1,9 @@
 package com.quangbach1709.restapi.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,10 +17,10 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String role;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<User> users = new HashSet<>();
+    @EqualsAndHashCode.Exclude
+    private Set<User> users;
 }

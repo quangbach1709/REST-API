@@ -1,6 +1,7 @@
 package com.quangbach1709.restapi.service;
 
 import com.quangbach1709.restapi.dto.PersonMapper;
+import com.quangbach1709.restapi.dto.RoleMapper;
 import com.quangbach1709.restapi.dto.UserDTO;
 import com.quangbach1709.restapi.dto.UserMapper;
 import com.quangbach1709.restapi.entity.User;
@@ -30,8 +31,8 @@ public class UserService {
 
     public UserDTO createUser(UserDTO userDTO) {
         User user = UserMapper.toEntity(userDTO);
-        user = userRepository.save(user);
-        return UserMapper.toDTO(user);
+        User savedUser = userRepository.save(user);
+        return UserMapper.toDTO(savedUser);
     }
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {
@@ -42,6 +43,11 @@ public class UserService {
                     existingUser.setIsActive(userDTO.getIsActive());
                     if (userDTO.getPerson() != null) {
                         existingUser.setPerson(PersonMapper.toEntity(userDTO.getPerson()));
+                    }
+                    if (userDTO.getRoles() != null) {
+                        existingUser.setRoles(userDTO.getRoles().stream()
+                                .map(RoleMapper::toEntity)
+                                .collect(Collectors.toSet()));
                     }
                     User updatedUser = userRepository.save(existingUser);
                     return UserMapper.toDTO(updatedUser);

@@ -27,10 +27,8 @@ public class UserController {
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         UserDTO userDTO = userService.getUserById(id);
         if (userDTO != null) {
-            System.out.printf( "\n \n","Bach dz bô doi", userDTO.toString());
             return ResponseEntity.ok(userDTO);
         } else {
-            System.out.println("test");
             return ResponseEntity.notFound().build();
         }
     }
@@ -39,6 +37,12 @@ public class UserController {
     public UserDTO createUser(@RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
     }
+
+//    @PostMapping("/person/{personId}")
+//    public UserDTO createUserPerson(@PathVariable Long personId, @RequestBody UserDTO userDTO) {
+//        userDTO.setPerson(personService.getPersonById(personId));
+//        return userService.createUser(userDTO);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
@@ -50,16 +54,16 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}/person/{personId}")
-    public ResponseEntity<UserDTO> updateUserPerson(@PathVariable Long id, @PathVariable Long personId) {
-        UserDTO userDTO = userService.getUserById(id);
-        if (userDTO != null) {
-            userDTO.setPersonId(personService.getPersonById(personId).getId());
-            return ResponseEntity.ok(userService.updateUser(id, userDTO));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PutMapping("/{id}/person/{personId}")
+//    public ResponseEntity<UserDTO> updateUserPerson(@PathVariable Long id, @PathVariable Long personId) {
+//        UserDTO userDTO = userService.getUserById(id);
+//        if (userDTO != null) {
+//            userDTO.setPerson(personService.getPersonById(personId));
+//            return ResponseEntity.ok(userService.updateUser(id, userDTO));
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
