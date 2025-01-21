@@ -2,7 +2,6 @@ package com.quangbach1709.restapi.service;
 
 import com.quangbach1709.restapi.dto.PersonDTO;
 import com.quangbach1709.restapi.dto.PersonMapper;
-import com.quangbach1709.restapi.entity.Company;
 import com.quangbach1709.restapi.entity.Person;
 import com.quangbach1709.restapi.repository.CompanyRepository;
 import com.quangbach1709.restapi.repository.PersonRepository;
@@ -35,12 +34,6 @@ public class PersonService {
     public PersonDTO createPerson(PersonDTO personDTO) {
         Person person = PersonMapper.toEntity(personDTO);
 
-        // Liên kết Company nếu có
-        if (personDTO.getCompanyId() != null) {
-            Company company = companyRepository.findById(personDTO.getCompanyId())
-                    .orElseThrow(() -> new RuntimeException("Company not found"));
-            person.setCompany(company);
-        }
 
         person = personRepository.save(person);
         return PersonMapper.toDTO(person);
@@ -55,13 +48,12 @@ public class PersonService {
                     existingPerson.setPhoneNumber(personDTO.getPhoneNumber());
                     existingPerson.setAddress(personDTO.getAddress());
 
-                    // Liên kết Company nếu có
-                    if (personDTO.getCompanyId() != null) {
-                        Company company = companyRepository.findById(personDTO.getCompanyId())
-                                .orElseThrow(() -> new RuntimeException("Company not found"));
-                        existingPerson.setCompany(company);
+                    if (personDTO.getCompany() != null) {
+                        existingPerson.setCompany(companyRepository.findById(personDTO.getCompany().getId())
+                                .orElseThrow(() -> new IllegalArgumentException("Company not found: " + personDTO.getCompany().getId())));
+                    } else {
+                        existingPerson.setCompany(null);
                     }
-
                     Person updatedPerson = personRepository.save(existingPerson);
                     return PersonMapper.toDTO(updatedPerson);
                 })

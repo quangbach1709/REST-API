@@ -12,10 +12,8 @@ public class PersonMapper {
         dto.setBirthdate(person.getBirthDate());
         dto.setPhoneNumber(person.getPhoneNumber());
         dto.setAddress(person.getAddress());
-        // Điền companyId nếu có
-        if (person.getCompany() != null) {
-            dto.setCompanyId(person.getCompany().getId());
-        }
+        dto.setCompany(person.getCompany() != null ? CompanyMapper.toDTO(person.getCompany()) : null);
+
         return dto;
     }
 
@@ -27,6 +25,7 @@ public class PersonMapper {
         person.setBirthDate(dto.getBirthdate());
         person.setPhoneNumber(dto.getPhoneNumber());
         person.setAddress(dto.getAddress());
+        person.setCompany(dto.getCompany() != null ? CompanyMapper.toEntity(dto.getCompany()) : null);
         return person;
     }
 }
