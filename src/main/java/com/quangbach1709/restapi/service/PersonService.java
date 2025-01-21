@@ -33,7 +33,11 @@ public class PersonService {
 
     public PersonDTO createPerson(PersonDTO personDTO) {
         Person person = PersonMapper.toEntity(personDTO);
+        if (personDTO.getCompany() != null) {
+            person.setCompany(companyRepository.findById(personDTO.getCompany().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Company not found: " + personDTO.getCompany().getId())));
 
+        }
 
         person = personRepository.save(person);
         return PersonMapper.toDTO(person);
