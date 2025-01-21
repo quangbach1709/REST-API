@@ -5,6 +5,8 @@ import com.quangbach1709.restapi.dto.CompanyMapper;
 import com.quangbach1709.restapi.entity.Company;
 import com.quangbach1709.restapi.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,11 @@ public class CompanyService {
         return companyRepository.findAll().stream()
                 .map(CompanyMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<CompanyDTO> getAllCompanies(Pageable pageable) {
+        return companyRepository.findAll(pageable)
+                .map(CompanyMapper::toDTO);
     }
 
     public CompanyDTO getCompanyById(Long id) {
@@ -48,4 +55,6 @@ public class CompanyService {
     public void deleteCompany(Long id) {
         companyRepository.deleteById(id);
     }
+
+
 }

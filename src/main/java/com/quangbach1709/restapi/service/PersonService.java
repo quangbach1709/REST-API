@@ -6,6 +6,8 @@ import com.quangbach1709.restapi.entity.Person;
 import com.quangbach1709.restapi.repository.CompanyRepository;
 import com.quangbach1709.restapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,16 @@ public class PersonService {
         return personRepository.findAll().stream()
                 .map(PersonMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<PersonDTO> getAllPersons(Pageable pageable) {
+        return personRepository.findAll(pageable)
+                .map(PersonMapper::toDTO);
+    }
+
+    public Page<PersonDTO> getPersonsByCompany(Long companyId, Pageable pageable) {
+        return personRepository.findByCompanyId(companyId, pageable)
+                .map(PersonMapper::toDTO);
     }
 
     public PersonDTO getPersonById(Long id) {
