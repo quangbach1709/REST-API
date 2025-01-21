@@ -1,15 +1,12 @@
 package com.quangbach1709.restapi.controller;
 
 import com.quangbach1709.restapi.dto.PersonDTO;
-import com.quangbach1709.restapi.dto.UserDTO;
-import com.quangbach1709.restapi.repository.PersonRepository;
 import com.quangbach1709.restapi.service.PersonService;
-import com.quangbach1709.restapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/persons")
@@ -18,9 +15,18 @@ public class PersonController {
     private PersonService personService;
 
 
+    //    @GetMapping
+//    public List<PersonDTO> getAllPersons() {
+//        return personService.getAllPersons();
+//    }
     @GetMapping
-    public List<PersonDTO> getAllPersons() {
-        return personService.getAllPersons();
+    public Page<PersonDTO> getAllPersons(Pageable pageable) {
+        return personService.getAllPersons(pageable);
+    }
+
+    @GetMapping("/company/{companyId}")
+    public Page<PersonDTO> getPersonsByCompany(@PathVariable Long companyId, Pageable pageable) {
+        return personService.getPersonsByCompany(companyId, pageable);
     }
 
     @GetMapping("/{id}")
