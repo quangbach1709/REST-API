@@ -9,11 +9,12 @@ import com.quangbach1709.restapi.repository.PersonRepository;
 import com.quangbach1709.restapi.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-//@Component
-public class DataFakerProject implements CommandLineRunner {
+@Component // Đảm bảo annotation @Component không bị comment
+public class DataFakerTask implements CommandLineRunner {
     @Autowired
     private ProjectRepository projectRepository;
 
