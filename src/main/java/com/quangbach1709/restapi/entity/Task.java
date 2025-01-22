@@ -26,12 +26,10 @@ public class Task {
     private LocalDateTime endTime;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TaskPriority priority;
+    private String priority; // 1: High, 2: Medium, 3: Low
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+    private String status; // 1: New, 2: In Progress, 3: Completed, 4: On Hold
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)

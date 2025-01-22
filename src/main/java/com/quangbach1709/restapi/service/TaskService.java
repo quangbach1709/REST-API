@@ -3,8 +3,6 @@ package com.quangbach1709.restapi.service;
 import com.quangbach1709.restapi.dto.TaskDTO;
 import com.quangbach1709.restapi.dto.TaskMapper;
 import com.quangbach1709.restapi.entity.Task;
-import com.quangbach1709.restapi.entity.TaskPriority;
-import com.quangbach1709.restapi.entity.TaskStatus;
 import com.quangbach1709.restapi.repository.PersonRepository;
 import com.quangbach1709.restapi.repository.ProjectRepository;
 import com.quangbach1709.restapi.repository.TaskRepository;
@@ -65,26 +63,8 @@ public class TaskService {
                 .orElse(null);
     }
 
-    private void validateTask(TaskDTO taskDTO) {
-        try {
-            TaskStatus.fromValue(taskDTO.getStatus());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid status. Must be one of: New, In Progress, Completed, On Hold");
-        }
-
-        try {
-            TaskPriority.fromValue(taskDTO.getPriority());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid priority. Must be one of: High, Medium, Low");
-        }
-    }
-
     public TaskDTO createTask(TaskDTO taskDTO) {
-        validateTask(taskDTO);
         Task task = TaskMapper.toEntity(taskDTO);
-
-        task.setStatus(TaskStatus.fromValue(taskDTO.getStatus()));
-        task.setPriority(TaskPriority.fromValue(taskDTO.getPriority()));
 
         task.setProject(projectRepository.findById(taskDTO.getProjectId())
                 .orElseThrow(() -> new IllegalArgumentException("Project not found")));
@@ -96,15 +76,14 @@ public class TaskService {
     }
 
     public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
-        validateTask(taskDTO);
         return taskRepository.findById(id)
                 .map(task -> {
                     task.setName(taskDTO.getName());
                     task.setDescription(taskDTO.getDescription());
                     task.setStartTime(taskDTO.getStartTime());
                     task.setEndTime(taskDTO.getEndTime());
-                    task.setPriority(TaskPriority.fromValue(taskDTO.getPriority()));
-                    task.setStatus(TaskStatus.fromValue(taskDTO.getStatus()));
+                    task.setPriority(taskDTO.getPriority());
+                    task.setStatus(taskDTO.getStatus());
 
                     task.setProject(projectRepository.findById(taskDTO.getProjectId())
                             .orElseThrow(() -> new IllegalArgumentException("Project not found")));

@@ -1,8 +1,6 @@
 package com.quangbach1709.restapi.dto;
 
 import com.quangbach1709.restapi.entity.Task;
-import com.quangbach1709.restapi.entity.TaskPriority;
-import com.quangbach1709.restapi.entity.TaskStatus;
 
 public class TaskMapper {
     public static TaskDTO toDTO(Task task) {
@@ -14,10 +12,23 @@ public class TaskMapper {
         dto.setDescription(task.getDescription());
         dto.setStartTime(task.getStartTime());
         dto.setEndTime(task.getEndTime());
-        dto.setPriority(task.getPriority().getValue());
-        dto.setStatus(task.getStatus().getValue());
+        dto.setPriority(task.getPriority());
+        dto.setStatus(task.getStatus());
 
-        // ... rest of the mapping code
+        if (task.getProject() != null) {
+            dto.setProjectId(task.getProject().getId());
+            dto.setProjectName(task.getProject().getName());
+            if (task.getProject().getCompany() != null) {
+                dto.setCompanyId(task.getProject().getCompany().getId());
+                dto.setCompanyName(task.getProject().getCompany().getName());
+            }
+        }
+
+        if (task.getPerson() != null) {
+            dto.setPersonId(task.getPerson().getId());
+            dto.setPersonName(task.getPerson().getFullName());
+        }
+
         return dto;
     }
 
@@ -30,8 +41,8 @@ public class TaskMapper {
         task.setDescription(dto.getDescription());
         task.setStartTime(dto.getStartTime());
         task.setEndTime(dto.getEndTime());
-        task.setPriority(TaskPriority.fromValue(dto.getPriority()));
-        task.setStatus(TaskStatus.fromValue(dto.getStatus()));
+        task.setPriority(dto.getPriority());
+        task.setStatus(dto.getStatus());
         return task;
     }
 }
