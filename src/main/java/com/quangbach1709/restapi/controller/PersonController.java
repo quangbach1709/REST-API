@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/persons")
@@ -58,5 +59,17 @@ public class PersonController {
     public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
         personService.deletePerson(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/avatar")
+    public ResponseEntity<PersonDTO> uploadAvatar(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            PersonDTO updatedPerson = personService.updateAvatar(id, file);
+            return ResponseEntity.ok(updatedPerson);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

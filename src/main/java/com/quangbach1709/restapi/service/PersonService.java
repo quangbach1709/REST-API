@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,9 @@ public class PersonService {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public List<PersonDTO> getAllPersons() {
         return personRepository.findAll().stream()
@@ -74,6 +78,24 @@ public class PersonService {
                     return PersonMapper.toDTO(updatedPerson);
                 })
                 .orElse(null);
+    }
+
+    public PersonDTO updateAvatar(Long id, MultipartFile file) {
+        return personRepository.findById(id)
+                .map(person -> {
+                    // Delete old avatar if exists
+                    if (person.getAvatar() != null) {
+                        fileStorageService.delete(person.getAvatar());
+                    }
+
+                    // Save new avatar
+                    String filename = fileStorageService.save(file);
+                    person.setAvatar(filename);
+
+                    Person updatedPerson = personRepository.save(person);
+                    return PersonMapper.toDTO(updatedPerson);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Person not found"));
     }
 
     public void deletePerson(Long id) {

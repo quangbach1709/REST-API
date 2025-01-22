@@ -7,6 +7,7 @@ public class PersonMapper {
     public static PersonDTO toDTO(Person person) {
         PersonDTO dto = new PersonDTO();
         dto.setId(person.getId());
+        dto.setAvatar(person.getAvatar());
         dto.setFullName(person.getFullName());
         dto.setGender(person.getGender());
         dto.setBirthdate(person.getBirthDate());
@@ -20,6 +21,7 @@ public class PersonMapper {
     public static Person toEntity(PersonDTO dto) {
         Person person = new Person();
         person.setId(dto.getId());
+        person.setAvatar(dto.getAvatar());
         person.setFullName(dto.getFullName());
         person.setGender(dto.getGender());
         person.setBirthDate(dto.getBirthdate());

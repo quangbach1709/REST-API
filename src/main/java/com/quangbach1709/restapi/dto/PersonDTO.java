@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 public class PersonDTO {
     private Long id;
+    private String avatar;
     private String fullName;
     private String gender;
     private LocalDate birthdate;

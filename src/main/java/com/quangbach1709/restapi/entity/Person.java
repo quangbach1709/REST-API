@@ -14,6 +14,9 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "avatar")
+    private String avatar;
+
     @Column(nullable = false, name = "full_name")
     private String fullName;
 
