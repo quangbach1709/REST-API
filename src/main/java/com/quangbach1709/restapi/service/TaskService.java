@@ -7,11 +7,20 @@ import com.quangbach1709.restapi.repository.PersonRepository;
 import com.quangbach1709.restapi.repository.ProjectRepository;
 import com.quangbach1709.restapi.repository.TaskRepository;
 import com.quangbach1709.restapi.repository.TaskSpecification;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 public class TaskService {
@@ -98,5 +107,49 @@ public class TaskService {
 
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    public ByteArrayInputStream exportTasksToExcel() {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Tasks");
+
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Project");
+            headerRow.createCell(1).setCellValue("Description");
+            headerRow.createCell(2).setCellValue("Start Time");
+            headerRow.createCell(3).setCellValue("End Time");
+            headerRow.createCell(4).setCellValue("Priority");
+            headerRow.createCell(5).setCellValue("Status");
+            headerRow.createCell(6).setCellValue("Person");
+
+            // Get all tasks
+            List<Task> tasks = taskRepository.findAll();
+
+            // Create data rows
+            int rowNum = 1;
+            for (Task task : tasks) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(task.getProject().getName());
+                row.createCell(1).setCellValue(task.getDescription());
+                row.createCell(2).setCellValue(task.getStartTime().toString());
+                row.createCell(3).setCellValue(task.getEndTime().toString());
+                row.createCell(4).setCellValue(task.getPriority());
+                row.createCell(5).setCellValue(task.getStatus());
+                row.createCell(6).setCellValue(task.getPerson().getFullName());
+            }
+
+            // Autosize columns
+            for (int i = 0; i < 7; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Write to ByteArrayOutputStream
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            return new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to export tasks to Excel", e);
+        }
     }
 }
