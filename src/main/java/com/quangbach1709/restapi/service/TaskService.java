@@ -62,8 +62,12 @@ public class TaskService {
         if (name != null && !name.trim().isEmpty()) {
             spec = spec.and(TaskSpecification.nameLike(name));
         }
-
         return taskRepository.findAll(spec, pageable).map(TaskMapper::toDTO);
+    }
+
+    public Page<TaskDTO> getTasks(Pageable pageable) {
+        return taskRepository.findAll(pageable)
+                .map(TaskMapper::toDTO);
     }
 
     public TaskDTO getTaskById(Long id) {

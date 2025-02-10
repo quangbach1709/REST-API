@@ -4,9 +4,12 @@ import com.quangbach1709.restapi.dto.ProjectDTO;
 import com.quangbach1709.restapi.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -33,6 +36,13 @@ public class ProjectController {
     @PostMapping
     public ProjectDTO createProject(@RequestBody ProjectDTO projectDTO) {
         return projectService.createProject(projectDTO);
+    }
+
+    @PostMapping("/paginate")
+    public Page<ProjectDTO> getProjectsWithCustomPagination(@RequestBody Map<String, Integer> request) {
+        int pageIndex = request.getOrDefault("pageIndex", 0);
+        int pageSize = request.getOrDefault("pageSize", 20);
+        return projectService.getAllProjects(PageRequest.of(pageIndex, pageSize));
     }
 
     @PutMapping("/{id}")
